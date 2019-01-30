@@ -1,4 +1,4 @@
-# Ansible Tower Enterprise on Docker
+## Ansible Tower Enterprise on Docker
 
 A Docker Ansible Tower image based on `centos 7`.
 
