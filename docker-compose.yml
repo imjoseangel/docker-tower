@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  tower:
+    image: imjoseangel/tower
+    build: .
+    security_opt:
+      - seccomp:unconfined
+    tmpfs:
+      - /run
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ports:
+      - "443:443"
