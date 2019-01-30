@@ -2,7 +2,7 @@
 
 A Docker Ansible Tower image based on `centos 7`.
 
-**This image is meant for development use only**
+:rotating_light: **This image is meant for development use only** :rotating_light:
 
 Before you starting the container, run the following command to set up the Docker host. It uses [special privileges](https://docs.docker.com/engine/reference/run/#/runtime-privilege-and-linux-capabilities) to create a cgroup hierarchy 
 for `systemd`. We do this in a separate setup step so we can run `systemd` in unprivileged containers.
