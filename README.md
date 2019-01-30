@@ -36,9 +36,11 @@ docker run -t -p 443:443 --name tower --security-opt seccomp=unconfined --tmpfs 
 
 ### Login
 
-*URL:* https://localhost
-*Username:* admin
-*Password:* password
+**URL:** https://localhost
+
+**Username:** admin
+
+**Password:** password
 
 ### License
 
