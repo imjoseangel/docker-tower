@@ -33,6 +33,13 @@ Allocating a pseudo-TTY is not strictly necessary, but it gives us pretty color-
 ```shell
 docker run -t -p 443:443 --name tower --security-opt seccomp=unconfined --tmpfs /run -v /sys/fs/cgroup:/sys/fs/cgroup:ro imjoseangel/ansible-tower
 ```
+
+### Login
+
+*URL:* https://localhost
+*Username:* admin
+*Password:* password
+
 ### License
 
 Copyright © 2019 [imjoseangel](http://imjoseangel.github.com). Licensed under [the MIT license](https://github.com/imjoseangel/docker-tower/blob/master/LICENSE).
