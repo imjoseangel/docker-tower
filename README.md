@@ -26,7 +26,7 @@ CentOS's `systemd` expects `/run` to be a `tmpfs` file system, but it can't moun
     -v /sys/fs/cgroup:/sys/fs/cgroup:ro
 
 Allocating a pseudo-TTY is not strictly necessary, but it gives us pretty color-coded logs that we can look at with `docker logs`:
-    -t
+   `-t`
 
 ### Full Command
 
