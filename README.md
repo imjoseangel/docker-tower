@@ -28,7 +28,7 @@ CentOS's `systemd` expects `/run` to be a `tmpfs` file system, but it can't moun
 Allocating a pseudo-TTY is not strictly necessary, but it gives us pretty color-coded logs that we can look at with `docker logs`:
     -t
 
-**Full Command**
+### Full Command
 
 ```shell
 docker run -t -p 443:443 --name tower --security-opt seccomp=unconfined --tmpfs /run -v /sys/fs/cgroup:/sys/fs/cgroup:ro imjoseangel/ansible-tower
