@@ -1,39 +1,51 @@
-FROM centos:7
+FROM ubuntu:xenial
 
 LABEL maintainer imjoseangel
 
-ENV container docker
-ENV ANSIBLE_TOWER_VER 3.4.1-1
+WORKDIR /tmp/tower-installer
 
-RUN yum install -y deltarpm epel-release
-RUN yum upgrade -y
+# update and install packages
+RUN apt-get update -y \
+    && apt-get install software-properties-common curl vim locales sudo apt-transport-https ca-certificates -y
 
-# Don't start any optional services except for the few we need.
-RUN find /etc/systemd/system \
-    /lib/systemd/system \
-    -path '*.wants/*' \
-    -not -name '*journald*' \
-    -not -name '*systemd-tmpfiles*' \
-    -not -name '*systemd-user-sessions*' \
-    -exec rm \{} \;
+# install ansible
+RUN apt-add-repository ppa:ansible/ansible-2.7 \
+    && apt-get update -y \
+    && apt-get install ansible -y
 
-RUN systemctl set-default multi-user.target
+# Set the locale
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
-COPY setup /sbin/
+# define tower version and PG_DATA
+ENV TOWER_VERSION 3.4.1-1
+ENV PG_DATA /var/lib/postgresql/9.6/main
 
-# create /var/log/tower
-RUN mkdir -p /var/log/tower
+# download tower installer
+RUN curl -sSL http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-${TOWER_VERSION}.tar.gz -o ansible-tower-setup-${TOWER_VERSION}.tar.gz \
+    && tar xvf ansible-tower-setup-${TOWER_VERSION}.tar.gz \
+    && rm -f ansible-tower-setup-${TOWER_VERSION}.tar.gz
 
-# Download & extract Tower tarball
-ADD http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz /opt/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz
-RUN tar xvzf /opt/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz -C /opt \
-    && rm -f /opt/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz
+# change working dir
+WORKDIR /tmp/tower-installer/ansible-tower-setup-${TOWER_VERSION}
 
-ADD inventory /opt/ansible-tower-setup-${ANSIBLE_TOWER_VER}/inventory
+# create var folder
+RUN mkdir /var/log/tower
 
-EXPOSE 443
+# copy inventory
+ADD inventory inventory
 
-STOPSIGNAL SIGRTMIN+3
+# install tower
+RUN ./setup.sh
 
-# Workaround for docker/docker#27202, technique based on comments from docker/docker#9212
-CMD [ "/bin/bash", "-c", "exec /sbin/init --log-target=journal 3>&1" ]
+# add entrypoint script
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 80 443
+
+# configure entrypoint
+ENTRYPOINT [ "/bin/bash", "-c" ]
+CMD [ "/entrypoint.sh" ]

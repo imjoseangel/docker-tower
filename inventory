@@ -1,5 +1,5 @@
 [tower]
-localhost ansible_connection=local
+localhost ansible_connection=local ansible_all_ipv6_addresses=''
 
 [database]
 
@@ -21,3 +21,4 @@ rabbitmq_cookie=rabbitmqcookie
 
 # Needs to be true for fqdns and ip addresses
 rabbitmq_use_long_name=false
+# Needs to remain false if you are using localhost
