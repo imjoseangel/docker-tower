@@ -1,52 +1,39 @@
-FROM ubuntu:xenial
+FROM centos:7
 
 LABEL maintainer imjoseangel
 
-WORKDIR /tmp/tower-installer
+ENV container docker
+ENV ANSIBLE_TOWER_VER 3.4.1-1
 
-# update and install packages
-RUN apt-get update -y \
-    && apt-get install software-properties-common curl vim locales sudo apt-transport-https ca-certificates -y
+RUN yum install -y deltarpm epel-release
+RUN yum upgrade -y
 
-# install ansible
-RUN apt-add-repository ppa:ansible/ansible-2.7 \
-    && apt-get update -y \
-    && apt-get install ansible -y
+# Don't start any optional services except for the few we need.
+RUN find /etc/systemd/system \
+    /lib/systemd/system \
+    -path '*.wants/*' \
+    -not -name '*journald*' \
+    -not -name '*systemd-tmpfiles*' \
+    -not -name '*systemd-user-sessions*' \
+    -exec rm \{} \;
 
-# Set the locale
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+RUN systemctl set-default multi-user.target
 
-# define tower version and PG_DATA
-ENV TOWER_VERSION 3.4.1-1
-ENV PG_DATA /var/lib/postgresql/9.6/main
-ENV AWX_PROJECTS /var/lib/awx/projects
+COPY setup /sbin/
 
-# download tower installer
-RUN curl -sSL http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-${TOWER_VERSION}.tar.gz -o ansible-tower-setup-${TOWER_VERSION}.tar.gz \
-    && tar xvf ansible-tower-setup-${TOWER_VERSION}.tar.gz \
-    && rm -f ansible-tower-setup-${TOWER_VERSION}.tar.gz
+# create /var/log/tower
+RUN mkdir -p /var/log/tower
 
-# change working dir
-WORKDIR /tmp/tower-installer/ansible-tower-setup-${TOWER_VERSION}
+# Download & extract Tower tarball
+ADD http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz /opt/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz
+RUN tar xvzf /opt/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz -C /opt \
+    && rm -f /opt/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz
 
-# create var folder
-RUN mkdir /var/log/tower
+ADD inventory /opt/ansible-tower-setup-${ANSIBLE_TOWER_VER}/inventory
 
-# copy inventory
-ADD inventory inventory
+EXPOSE 443
 
-# install tower
-RUN ./setup.sh
+STOPSIGNAL SIGRTMIN+3
 
-# add entrypoint script
-ADD docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-
-VOLUME ["${PG_DATA}", "${AWX_PROJECTS}", "/certs"]
-EXPOSE 80 443
-
-# configure entrypoint
-CMD ["/docker-entrypoint.sh", "ansible-tower"]
+# Workaround for docker/docker#27202, technique based on comments from docker/docker#9212
+CMD [ "/bin/bash", "-c", "exec /sbin/init --log-target=journal 3>&1" ]
