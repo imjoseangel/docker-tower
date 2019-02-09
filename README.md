@@ -1,4 +1,4 @@
-[![Get your own image badge on microbadger.com](https://images.microbadger.com/badges/image/imjoseangel/ansible-tower.svg)](https://microbadger.com/images/imjoseangel/ansible-tower) "Get your own image badge on microbadger.com")
+[![Get your own image badge on microbadger.com](https://images.microbadger.com/badges/image/imjoseangel/ansible-tower.svg)](https://microbadger.com/images/imjoseangel/ansible-tower "Get your own image badge on microbadger.com")
 
 ## Ansible Tower Enterprise on Docker
 
