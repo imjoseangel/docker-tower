@@ -1,4 +1,4 @@
-[![](https://images.microbadger.com/badges/image/imjoseangel/ansible-tower.svg)](https://microbadger.com/images/imjoseangel/ansible-tower "Get your own image badge on microbadger.com")
+[![Get your own image badge on microbadger.com](https://images.microbadger.com/badges/image/imjoseangel/ansible-tower.svg)](https://microbadger.com/images/imjoseangel/ansible-tower) "Get your own image badge on microbadger.com")
 
 ## Ansible Tower Enterprise on Docker
 
@@ -60,8 +60,8 @@ The ansible-tower Docker image uses a generic certificate generated for www.ansi
 program. If you generate your own certificate, it will be copied into /etc/tower by the entrypoint script if a volume
 is mapped to /certs in the container, e.g:
 
-* /certs/tower.cert -> /etc/tower/tower.cert
-* /certs/tower.key  -> /etc/tower/tower.key
+**/certs/tower.cert** -> /etc/tower/tower.cert
+**/certs/tower.key** -> /etc/tower/tower.key
 
 The environment variable SERVER_NAME should match the common name of the generated certificate and will be used to update
 the nginx configuration file.
@@ -70,14 +70,13 @@ A license file can also be included similar to the certificates by renaming your
 placing it in your local, mapped volume. The entrypoint script checks for the license file seperately and does not depend
 on the certificates.
 
-* /certs/license -> /etc/tower/license
+**/certs/license** -> /etc/tower/license
 
 The license file can also be uploaded on first login to the Ansible Tower web interface.
 
-
 ### Login
 
-**URL:** https://localhost
+**URL:** `https://localhost`
 
 **Username:** admin
 
