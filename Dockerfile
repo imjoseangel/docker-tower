@@ -49,4 +49,4 @@ VOLUME ["${PG_DATA}", "${AWX_PROJECTS}", "/certs"]
 EXPOSE 80 443
 
 # configure entrypoint
-CMD ["/docker-entrypoint.sh", "ansible-tower"]
+ENTRYPOINT ["/docker-entrypoint.sh", "ansible-tower"]
