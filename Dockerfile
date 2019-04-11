@@ -20,7 +20,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 # define tower version and PG_DATA
-ENV TOWER_VERSION 3.4.1-1
+ENV TOWER_VERSION 3.4.3-1
 ENV PG_DATA /var/lib/postgresql/9.6/main
 ENV AWX_PROJECTS /var/lib/awx/projects
 
