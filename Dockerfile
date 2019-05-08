@@ -6,7 +6,7 @@ WORKDIR /tmp/tower-installer
 
 # update and install packages
 RUN apt-get update -y \
-    && apt-get install software-properties-common curl vim locales apt-transport-https ca-certificates -y
+    && apt-get install software-properties-common curl vim locales sudo apt-transport-https ca-certificates -y
 
 # install ansible
 RUN apt-add-repository ppa:ansible/ansible-2.7 \
