@@ -1,0 +1,17 @@
+version: '3'
+services:
+  tower:
+    container_name: "tower"
+    tty: true
+    stdin_open: false
+    image: "imjoseangel/ansible-tower"
+    ports:
+      - "443:443"
+    volumes:
+      - ~/Documents/Ansible/Licensing:/certs
+      - ~/Documents/Ansible/pgdata:/var/lib/postgresql/9.4/main
+    environment:
+      - SERVER_NAME=voyager.raet.nl
+    hostname: voyager.raet.nl
+    labels:
+      - "Ansible Tower"
