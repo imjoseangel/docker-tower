@@ -11,7 +11,7 @@ services:
       - ~/Documents/Ansible/Licensing:/certs
       - ~/Documents/Ansible/pgdata:/var/lib/postgresql/9.4/main
     environment:
-      - SERVER_NAME=voyager.raet.nl
-    hostname: voyager.raet.nl
+      - SERVER_NAME=<myservername.domain.com>
+    hostname: <myhostname.domain.com>
     labels:
       - "Ansible Tower"
