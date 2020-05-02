@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:xenial
 
 LABEL maintainer="@imjoseangel"
 
@@ -9,7 +9,7 @@ RUN apt-get update -y \
     && apt-get install software-properties-common curl vim locales sudo apt-transport-https ca-certificates -y
 
 # install ansible
-RUN apt-add-repository ppa:ansible/ansible-2.9 \
+RUN apt-add-repository ppa:ansible/ansible \
     && apt-get update -y \
     && apt-get install ansible -y
 
@@ -20,7 +20,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 # define tower version and PG_DATA
-ENV TOWER_VERSION 3.6.4-1
+ENV TOWER_VERSION 3.5.6-1
 ENV PG_DATA /var/lib/postgresql/9.6/main
 ENV AWX_PROJECTS /var/lib/awx/projects
 
